@@ -9,18 +9,14 @@ public class GameWindow implements KeyListener{
     public JFrame window; 
     public JPanel leftPanel; 
     public JPanel rightPanel;
+    public double fieldHeight;
+    
     public GameWindow(Player player, Bot bot){
         ImageIcon img = new ImageIcon("images/PongImg.png");
         double[] resolution = GetResolution();
-        window = new JFrame("Pong");    
-        rightPanel = new JPanel();  
-        leftPanel = new JPanel();  
-        rightPanel.setBounds(200,10,15,200);    
-        rightPanel.setBackground(Color.black);  
-        leftPanel = GetLeftPanel(resolution);
+        window = new JFrame("Pong - Game");    
         window.add(GetLeftPanel(resolution));  
-        rightPanel = GetRightPanel(resolution);
-        window.add(rightPanel);
+        window.add(GetRightPanel(resolution));
         window.setSize((int)resolution[0],(int)resolution[1]);    
         window.setLayout(null);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,13 +29,13 @@ public class GameWindow implements KeyListener{
     
     @Override
     public void keyPressed(KeyEvent e) {
-        //TODO: Disable moving out of field
-        Rectangle rec = leftPanel.getBounds();
-        int key = e.getKeyCode();
-        if(key == KeyEvent.VK_W)
-            leftPanel.setLocation(rec.x,rec.y-5);
-        if(key == KeyEvent.VK_S)
-          leftPanel.setLocation(rec.x,rec.y+5);
+        Rectangle leftPanelBounds = leftPanel.getBounds();
+        int inputKey = e.getKeyCode();
+        
+        if(inputKey == KeyEvent.VK_W && leftPanelBounds.y >1)
+            leftPanel.setLocation(leftPanelBounds.x,leftPanelBounds.y-5);
+        if(inputKey == KeyEvent.VK_S && leftPanelBounds.y + fieldHeight * 0.3  < fieldHeight-30) //number needs to removed here later
+            leftPanel.setLocation(leftPanelBounds.x,leftPanelBounds.y+5);
     }
     
     @Override
@@ -53,8 +49,9 @@ public class GameWindow implements KeyListener{
     }
     
     private double[] GetResolution(){
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    return new double[] {screenSize.getWidth(), screenSize.getHeight()};
+    Rectangle windowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+    fieldHeight = windowBounds.height;
+    return new double[] {windowBounds.width, windowBounds.height};
     }
     
     private JPanel GetLeftPanel(double[] resolution){
@@ -62,6 +59,7 @@ public class GameWindow implements KeyListener{
         double width = resolution[0] - resolution[0] * 0.99;
         double panelHeight = resolution[1] * 0.3;
         double mid = resolution[1] / 2 - panelHeight / 2;
+        leftPanel = new JPanel();  
         leftPanel.setBounds((int)topLeft,(int)mid,(int)width, (int )panelHeight);    
         leftPanel.setBackground(Color.white);  
         return leftPanel;
@@ -72,9 +70,9 @@ public class GameWindow implements KeyListener{
         double topRight = resolution[0] - resolution[0] / 100 *2 - width;
         double panelHeight = resolution[1] * 0.3;
         double mid = resolution[1] / 2 - panelHeight / 2;
+        rightPanel = new JPanel(); 
         rightPanel.setBounds((int)topRight,(int)mid,(int)width, (int )panelHeight);    
         rightPanel.setBackground(Color.white);  
         return rightPanel;
     }
-
 }
