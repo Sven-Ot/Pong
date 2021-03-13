@@ -1,9 +1,7 @@
-package src;
-import src.Fenster;
+import src.GameWindow;
+
 public class Main {
     public static void main(String[] args){
-        Fenster fenster = new Fenster();
-        Thread t = new Thread();
-        t.start();
-    }
+        GameWindow window = new GameWindow(null,null);
+    }  
 }
