@@ -47,22 +47,30 @@ public class GameWindow implements KeyListener{
     {
         Rectangle ballBounds = ball.getBounds();
         CheckBoundsToBorder(ballBounds);
+        CheckBallConnectsToPanel(ballBounds);
         ball.setLocation(ballBounds.x+xDirection,ballBounds.y+yDirection);
     }
     
     public void CheckBoundsToBorder(Rectangle ballBounds){
-        if(ballBounds.x > resolution[0] - ballSize){ 
+        if(ballBounds.x > resolution[0] - ballSize) 
+            xDirection *= -1;   
+        if(ballBounds.y > resolution[1] - ballSize) 
+            yDirection *= -1;  
+        if(ballBounds.x < 0) 
             xDirection *= -1;
-        } 
-        if(ballBounds.y > resolution[1] - ballSize){ 
-            yDirection *= -1;
-        }   
-        if(ballBounds.x < 0){ 
-            xDirection *= -1;
-        } 
-        if(ballBounds.y < 0){ 
-            yDirection *= -1;
-        } 
+        if(ballBounds.y < 0)
+            yDirection *= -1; 
+    }
+    
+    public void CheckBallConnectsToPanel(Rectangle ballBounds){   
+        //Doesn't work perfect
+        Rectangle leftPanelBounds = leftPanel.getBounds();
+        if(ballBounds.x < leftPanelBounds.x+ leftPanelBounds.width)
+            if(leftPanelBounds.y < ballBounds.y)
+                if(leftPanelBounds.y + leftPanelBounds.height < ballBounds.y + ballSize ) {
+                    xDirection *= -1;
+                    yDirection *= -1; 
+                }
     }
     
     @Override
@@ -71,9 +79,9 @@ public class GameWindow implements KeyListener{
         int inputKey = e.getKeyCode();
         
         if(inputKey == KeyEvent.VK_W && leftPanelBounds.y >1)
-            leftPanel.setLocation(leftPanelBounds.x,leftPanelBounds.y-5);
+            leftPanel.setLocation(leftPanelBounds.x,leftPanelBounds.y-30);
         if(inputKey == KeyEvent.VK_S && leftPanelBounds.y + fieldHeight * 0.3  < fieldHeight-30) //number needs to removed here later
-            leftPanel.setLocation(leftPanelBounds.x,leftPanelBounds.y+5);
+            leftPanel.setLocation(leftPanelBounds.x,leftPanelBounds.y+30);
     }
     
     @Override
