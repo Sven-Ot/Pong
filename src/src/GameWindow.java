@@ -21,11 +21,13 @@ public class GameWindow implements KeyListener{
     public GameWindow(Player player, Bot bot){
         ImageIcon img = new ImageIcon("images/PongImg.png");
         resolution = GetResolution();
-        window = new JFrame("Pong - Game");    
+        window = new JFrame("Just Pong - Game");    
         window.add(GetLeftPanel(resolution));  
         window.add(GetRightPanel(resolution));
         window.add(GetBall(resolution));
         window.setSize((int)resolution[0],(int)resolution[1]);    
+        window.setResizable(false);
+        window.setBackground(Color.black);
         window.setLayout(null);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
