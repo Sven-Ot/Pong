@@ -67,9 +67,8 @@ public class GameWindow implements KeyListener{
         Rectangle leftPanelBounds = leftPanel.getBounds();
         if(ballBounds.x < leftPanelBounds.x+ leftPanelBounds.width)
             if(leftPanelBounds.y < ballBounds.y)
-                if(leftPanelBounds.y + leftPanelBounds.height < ballBounds.y + ballSize ) {
+                if(leftPanelBounds.y + leftPanelBounds.height > ballBounds.y + ballSize ) {
                     xDirection *= -1;
-                    yDirection *= -1; 
                 }
     }
     
