@@ -4,19 +4,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameWindow implements KeyListener{
     public JFrame window; 
     public JPanel leftPanel; 
     public JPanel rightPanel;
+    public JPanel ball;
     public double fieldHeight;
+    public double[] resolution;
+    public int ballSize = 20;
+    public int xDirection = 1;
+    public int yDirection = 1;
     
     public GameWindow(Player player, Bot bot){
         ImageIcon img = new ImageIcon("images/PongImg.png");
-        double[] resolution = GetResolution();
+        resolution = GetResolution();
         window = new JFrame("Pong - Game");    
         window.add(GetLeftPanel(resolution));  
         window.add(GetRightPanel(resolution));
+        window.add(GetBall(resolution));
         window.setSize((int)resolution[0],(int)resolution[1]);    
         window.setLayout(null);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,6 +33,36 @@ public class GameWindow implements KeyListener{
         window.getContentPane().setBackground(Color.black);
         window.addKeyListener(this);
         window.setIconImage(img.getImage());
+        
+        Timer timer = new Timer();
+        TimerTask tt = new TimerTask() {
+            public void run() {
+                MoveBall();
+            }
+        };
+        timer.schedule(tt, 1, 3);
+    }
+    
+    public void MoveBall()
+    {
+        Rectangle ballBounds = ball.getBounds();
+        CheckBoundsToBorder(ballBounds);
+        ball.setLocation(ballBounds.x+xDirection,ballBounds.y+yDirection);
+    }
+    
+    public void CheckBoundsToBorder(Rectangle ballBounds){
+        if(ballBounds.x > resolution[0] - ballSize){ 
+            xDirection *= -1;
+        } 
+        if(ballBounds.y > resolution[1] - ballSize){ 
+            yDirection *= -1;
+        }   
+        if(ballBounds.x < 0){ 
+            xDirection *= -1;
+        } 
+        if(ballBounds.y < 0){ 
+            yDirection *= -1;
+        } 
     }
     
     @Override
@@ -74,5 +112,15 @@ public class GameWindow implements KeyListener{
         rightPanel.setBounds((int)topRight,(int)mid,(int)width, (int )panelHeight);    
         rightPanel.setBackground(Color.white);  
         return rightPanel;
+    }
+
+    private JPanel GetBall(double[] resolution) {
+      double x = resolution[0] / 2 - ballSize /2;
+      double y = resolution[1] / 2 - ballSize /2;
+      ball = new JPanel(); 
+      ball.setBounds((int)x,(int)y,20,20);    
+      ball.setBackground(Color.white);  
+      //Get middle of the field
+      return ball;
     }
 }
