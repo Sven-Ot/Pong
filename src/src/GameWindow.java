@@ -48,9 +48,12 @@ public class GameWindow implements KeyListener{
     public void MoveBall()
     {
         Rectangle ballBounds = ball.getBounds();
+
         CheckBoundsToBorder(ballBounds);
-        CheckBallConnectsToPanel(ballBounds);
+        CheckBallConnectsToLeftPanel(ballBounds);
+        CheckBallConnectsToRightPanel(ballBounds);
         ball.setLocation(ballBounds.x+xDirection,ballBounds.y+yDirection);
+        
     }
     
     public void CheckBoundsToBorder(Rectangle ballBounds){
@@ -64,13 +67,23 @@ public class GameWindow implements KeyListener{
             yDirection *= -1; 
     }
     
-    public void CheckBallConnectsToPanel(Rectangle ballBounds){   
+    public void CheckBallConnectsToLeftPanel(Rectangle ballBounds){   
         //Doesn't work perfect
         Rectangle leftPanelBounds = leftPanel.getBounds();
         if(ballBounds.x < leftPanelBounds.x+ leftPanelBounds.width)
             if(leftPanelBounds.y < ballBounds.y)
                 if(leftPanelBounds.y + leftPanelBounds.height > ballBounds.y + ballSize ) {
                     xDirection *= -1;
+                }
+    }
+    public void CheckBallConnectsToRightPanel(Rectangle ballBounds){   
+        //Doesn't work at all
+        Rectangle RightPanelBounds = rightPanel.getBounds();
+        if(ballBounds.x >= RightPanelBounds.x+ RightPanelBounds.width)
+            if(RightPanelBounds.y < ballBounds.y)
+                if((RightPanelBounds.y + RightPanelBounds.height -2) > ballBounds.y + ballSize ) {
+                    xDirection *= -1;
+
                 }
     }
     
@@ -132,4 +145,5 @@ public class GameWindow implements KeyListener{
       //Get middle of the field
       return ball;
     }
+
 }
