@@ -52,6 +52,7 @@ public class GameWindow implements KeyListener{
         CheckBoundsToBorder(ballBounds);
         CheckBallConnectsToLeftPanel(ballBounds);
         CheckBallConnectsToRightPanel(ballBounds);
+        BotToBall(ballBounds);
         ball.setLocation(ballBounds.x+xDirection,ballBounds.y+yDirection);
         
     }
@@ -79,11 +80,11 @@ public class GameWindow implements KeyListener{
     public void CheckBallConnectsToRightPanel(Rectangle ballBounds){   
         //Doesn't work at all
         Rectangle RightPanelBounds = rightPanel.getBounds();
-        if(ballBounds.x >= RightPanelBounds.x+ RightPanelBounds.width)
+        if(ballBounds.x >= RightPanelBounds.x)
             if(RightPanelBounds.y < ballBounds.y)
-                if((RightPanelBounds.y + RightPanelBounds.height -2) > ballBounds.y + ballSize ) {
+                if(RightPanelBounds.y + RightPanelBounds.height > ballBounds.y + ballSize ) {
                     xDirection *= -1;
-
+                    
                 }
     }
     
@@ -102,7 +103,7 @@ public class GameWindow implements KeyListener{
     public void keyTyped(KeyEvent e) {
         return;
     }
-
+    
     @Override
     public void keyReleased(KeyEvent e) {
         return;
@@ -132,7 +133,7 @@ public class GameWindow implements KeyListener{
         double mid = resolution[1] / 2 - panelHeight / 2;
         rightPanel = new JPanel(); 
         rightPanel.setBounds((int)topRight,(int)mid,(int)width, (int )panelHeight);    
-        rightPanel.setBackground(Color.white);  
+        rightPanel.setBackground(Color.white);
         return rightPanel;
     }
 
@@ -144,6 +145,28 @@ public class GameWindow implements KeyListener{
       ball.setBackground(Color.white);  
       //Get middle of the field
       return ball;
+    }
+    
+    public void BotToBall(Rectangle ballBounds){
+        Rectangle RightPanelBounds = rightPanel.getBounds();
+        if(((RightPanelBounds.x + RightPanelBounds.width) - ballBounds.x) <= 200){
+            // When the ball under the Panel
+            if((RightPanelBounds.y + RightPanelBounds.height) < ballBounds.y + ballSize){
+                for(int i=RightPanelBounds.y + RightPanelBounds.height;i <= ballBounds.y;i++){
+                    if((fieldHeight - 30) > i ){
+                        rightPanel.setLocation(RightPanelBounds.x,(i - RightPanelBounds.height));
+                    }
+                }
+            }
+            // When the ball above the panel
+            if((RightPanelBounds.y) > ballBounds.y + ballSize){
+                System.out.println("true");
+                for(int i=RightPanelBounds.y;i >= ballBounds.y;i--){
+                    rightPanel.setLocation(RightPanelBounds.x,i);
+                }
+            }
+
+        }
     }
 
 }
