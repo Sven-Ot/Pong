@@ -47,13 +47,16 @@ public class GameWindow implements KeyListener{
     
     public void MoveBall()
     {
-        Rectangle ballBounds = ball.getBounds();
-
-        CheckBoundsToBorder(ballBounds);
-        CheckBallConnectsToLeftPanel(ballBounds);
-        CheckBallConnectsToRightPanel(ballBounds);
-        BotToBall(ballBounds);
-        ball.setLocation(ballBounds.x+xDirection,ballBounds.y+yDirection);
+        Rectangle ballOutline = ball.getBounds();
+        CheckBoundsToBorder(ballOutline);
+        CheckBallConnectsToLeftPanel(ballOutline);
+        CheckBallConnectsToRightPanel(ballOutline);
+        BotMovement(ballOutline);
+        CheckBallOutOfMap();
+        ball.setLocation(ballOutline.x+xDirection,ballOutline.y+yDirection);
+    }
+    
+    private void CheckBallOutOfMap() {
         
     }
     
@@ -116,7 +119,7 @@ public class GameWindow implements KeyListener{
     }
     
     private JPanel GetLeftPanel(double[] resolution){
-        double topLeft = resolution[0] / 100 *2;
+        double topLeft = resolution[0] / 50 *2;
         double width = resolution[0] - resolution[0] * 0.99;
         double panelHeight = resolution[1] * 0.3;
         double mid = resolution[1] / 2 - panelHeight / 2;
@@ -128,7 +131,7 @@ public class GameWindow implements KeyListener{
     
     private JPanel GetRightPanel(double[] resolution){
         double width = resolution[0] - resolution[0] * 0.99;
-        double topRight = resolution[0] - resolution[0] / 100 *2 - width;
+        double topRight = resolution[0] - resolution[0] / 50 *2 - width;
         double panelHeight = resolution[1] * 0.3;
         double mid = resolution[1] / 2 - panelHeight / 2;
         rightPanel = new JPanel(); 
@@ -147,26 +150,14 @@ public class GameWindow implements KeyListener{
       return ball;
     }
     
-    public void BotToBall(Rectangle ballBounds){
-        Rectangle RightPanelBounds = rightPanel.getBounds();
-        if(((RightPanelBounds.x + RightPanelBounds.width) - ballBounds.x) <= 200){
-            // When the ball under the Panel
-            if((RightPanelBounds.y + RightPanelBounds.height) < ballBounds.y + ballSize){
-                for(int i=RightPanelBounds.y + RightPanelBounds.height;i <= ballBounds.y;i++){
-                    if((fieldHeight - 30) > i ){
-                        rightPanel.setLocation(RightPanelBounds.x,(i - RightPanelBounds.height));
-                    }
-                }
-            }
-            // When the ball above the panel
-            if((RightPanelBounds.y) > ballBounds.y + ballSize){
-                System.out.println("true");
-                for(int i=RightPanelBounds.y;i >= ballBounds.y;i--){
-                    rightPanel.setLocation(RightPanelBounds.x,i);
-                }
-            }
-
-        }
+    public void BotMovement(Rectangle ballBounds){
+        Rectangle rightPanelBounce = rightPanel.getBounds();
+        
+        if(rightPanelBounce.y + rightPanelBounce.height / 2 > 
+            ballBounds.y +  ballBounds.height / 2 && rightPanelBounce.y >1)
+            rightPanel.setLocation(rightPanelBounce.x, rightPanelBounce.y -3);
+        else 
+            if(rightPanelBounce.y + fieldHeight * 0.3  < fieldHeight)
+                rightPanel.setLocation(rightPanelBounce.x, rightPanelBounce.y +3);
     }
-
 }
