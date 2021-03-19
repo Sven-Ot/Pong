@@ -17,7 +17,11 @@ public class GameWindow implements KeyListener{
     public int ballSize = 20;
     public int xDirection = 1;
     public int yDirection = 1;
-    
+    public double leftPlayerBorder;
+    public double rightPlayerBorder;    
+    public int playerScore = 0;
+    public int botScore = 0;
+        
     public GameWindow(Player player, Bot bot){
         ImageIcon img = new ImageIcon("images/PongImg.png");
         resolution = GetResolution();
@@ -48,16 +52,30 @@ public class GameWindow implements KeyListener{
     public void MoveBall()
     {
         Rectangle ballOutline = ball.getBounds();
+
         CheckBoundsToBorder(ballOutline);
         CheckBallConnectsToLeftPanel(ballOutline);
         CheckBallConnectsToRightPanel(ballOutline);
         BotMovement(ballOutline);
-        CheckBallOutOfMap();
         ball.setLocation(ballOutline.x+xDirection,ballOutline.y+yDirection);
+        CheckBallOutOfMap(ballOutline);
     }
     
-    private void CheckBallOutOfMap() {
+    private void CheckBallOutOfMap(Rectangle ballOutline) {
+        double middleX = resolution[0] / 2 - ballSize /2;
+        double middleY = resolution[1] / 2 - ballSize /2;
         
+        if(ballOutline.x < leftPlayerBorder){
+            botScore ++;
+            ball.setLocation((int)middleX,(int)y);
+            xDirection *= -1;   
+        }
+        else if(ballOutline.x + ballOutline.width > rightPlayerBorder) {
+            playerScore ++;
+            ball.setLocation((int)middleX,(int)y);
+            xDirection *= -1;   
+        }
+            
     }
     
     public void CheckBoundsToBorder(Rectangle ballBounds){
@@ -87,7 +105,6 @@ public class GameWindow implements KeyListener{
             if(RightPanelBounds.y < ballBounds.y)
                 if(RightPanelBounds.y + RightPanelBounds.height > ballBounds.y + ballSize ) {
                     xDirection *= -1;
-                    
                 }
     }
     
@@ -126,6 +143,7 @@ public class GameWindow implements KeyListener{
         leftPanel = new JPanel();  
         leftPanel.setBounds((int)topLeft,(int)mid,(int)width, (int )panelHeight);    
         leftPanel.setBackground(Color.white);  
+        leftPlayerBorder = topLeft;
         return leftPanel;
     }
     
@@ -137,16 +155,16 @@ public class GameWindow implements KeyListener{
         rightPanel = new JPanel(); 
         rightPanel.setBounds((int)topRight,(int)mid,(int)width, (int )panelHeight);    
         rightPanel.setBackground(Color.white);
+        rightPlayerBorder = topRight + width;
         return rightPanel;
     }
 
     private JPanel GetBall(double[] resolution) {
       double x = resolution[0] / 2 - ballSize /2;
       double y = resolution[1] / 2 - ballSize /2;
-      ball = new JPanel(); 
-      ball.setBounds((int)x,(int)y,20,20);    
-      ball.setBackground(Color.white);  
-      //Get middle of the field
+      ball = new JPanel();
+      ball.setBounds((int)x,(int)y,20,20);   
+      ball.setBackground(Color.white);
       return ball;
     }
     
@@ -154,7 +172,7 @@ public class GameWindow implements KeyListener{
         Rectangle rightPanelBounce = rightPanel.getBounds();
         
         if(rightPanelBounce.y + rightPanelBounce.height / 2 > 
-            ballBounds.y +  ballBounds.height / 2 && rightPanelBounce.y >1)
+            ballBounds.y +  ballBounds.height / 2 && rightPanelBounce.y >0)
             rightPanel.setLocation(rightPanelBounce.x, rightPanelBounce.y -3);
         else 
             if(rightPanelBounce.y + fieldHeight * 0.3  < fieldHeight)
