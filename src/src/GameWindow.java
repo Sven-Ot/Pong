@@ -178,4 +178,59 @@ public class GameWindow implements KeyListener{
             if(rightPanelBounce.y + fieldHeight * 0.3  < fieldHeight)
                 rightPanel.setLocation(rightPanelBounce.x, rightPanelBounce.y +3);
     }
+    
+        public void CheckBallConnectsToPanel(Rectangle Object1,Rectangle Object2){
+        Point topLeftObject1 = new Point();
+        topLeftObject1.y = Object1.y;
+        topLeftObject1.x = Object1.x;
+
+        Point bottomRightObject1 = new Point();
+        bottomRightObject1.y = Object1.y+Object1.height;
+        bottomRightObject1.x = Object1.x+Object1.width;
+
+        Point topLeftObject2 = new Point();
+        topLeftObject2.y = Object2.y;
+        topLeftObject2.x = Object2.x;
+
+        Point bottomRightObject2 = new Point();
+        bottomRightObject2.y = Object2.y+Object2.height;
+        bottomRightObject2.x = Object2.x+Object2.width;
+              
+//        topLeftObject1.x=0;
+//        topLeftObject1.y=10; 
+//        bottomRightObject1.x=10;
+//        bottomRightObject1.y=0;
+//        topLeftObject2.x=5;
+//        topLeftObject2.y=5; 
+//        bottomRightObject2.x=15;
+//        bottomRightObject2.y=0;
+                
+        System.out.println(doOverlap(topLeftObject1, bottomRightObject1, topLeftObject2, bottomRightObject2)); 
+    }
+    public boolean doOverlap(
+            Point topLeftObject1, 
+            Point bottomRightObject1, 
+            Point topLeftObject2, 
+            Point bottomRightObject2) {
+
+          if (
+                topLeftObject1.x == bottomRightObject1.x || 
+                topLeftObject1.y == bottomRightObject2.y || 
+                topLeftObject2.x == bottomRightObject2.x || 
+                topLeftObject2.y == bottomRightObject2.y
+                ) 
+            {
+                return false;
+            }
+        if (topLeftObject1.x >= bottomRightObject2.x || topLeftObject2.x >= bottomRightObject1.x) {
+            return false;
+        }
+ 
+        if (topLeftObject1.y <= bottomRightObject2.y || topLeftObject2.y <= bottomRightObject1.y) {
+            return false;
+        }
+ 
+        ball.setBackground(Color.red);
+        return true;
+    }
 }
