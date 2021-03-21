@@ -21,7 +21,8 @@ public class GameWindow implements KeyListener{
     public double rightPlayerBorder;    
     public int playerScore = 0;
     public int botScore = 0;
-        
+    Timer timer = new Timer();
+    
     public GameWindow(Player player, Bot bot){
         ImageIcon img = new ImageIcon("images/PongImg.png");
         resolution = GetResolution();
@@ -40,7 +41,7 @@ public class GameWindow implements KeyListener{
         window.addKeyListener(this);
         window.setIconImage(img.getImage());
         
-        Timer timer = new Timer();
+        
         TimerTask tt = new TimerTask() {
             public void run() {
                 MoveBall();
@@ -66,19 +67,23 @@ public class GameWindow implements KeyListener{
     private void CheckBallOutOfMap(Rectangle ballOutline) {
         double middleX = resolution[0] / 2 - ballSize /2;
         double middleY = resolution[1] / 2 - ballSize /2;
+        boolean gotPoint = false;
         
         if(ballOutline.x < leftPlayerBorder - ballOutline.width*5){
             botScore ++;
             ball.setLocation((int)middleX,(int)middleY);
-            xDirection *= -1;   
+            xDirection *= -1;
+            gotPoint = true;
+            
         }
         else if(ballOutline.x + ballOutline.width > rightPlayerBorder + ballOutline.width*5) {
             playerScore ++;
             ball.setLocation((int)middleX,(int)middleY);
-            xDirection *= -1;   
+            xDirection *= -1;
+            gotPoint = true;
         }
-        
-            
+        if(gotPoint)
+            timer.cancel();          
     }
     
     public void CheckBoundsToBorder(Rectangle ballBounds){
