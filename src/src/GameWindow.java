@@ -60,33 +60,30 @@ public class GameWindow implements KeyListener{
         CheckBallConnectsToPanel(ballOutline,panelRightOutline);
         BotMovement(ballOutline);
         ball.setLocation(ballOutline.x+xDirection,ballOutline.y+yDirection);
-//        CheckBallOutOfMap(ballOutline);
+        CheckBallOutOfMap(ballOutline);
     }
     
     private void CheckBallOutOfMap(Rectangle ballOutline) {
         double middleX = resolution[0] / 2 - ballSize /2;
         double middleY = resolution[1] / 2 - ballSize /2;
         
-        if(ballOutline.x < leftPlayerBorder){
+        if(ballOutline.x < leftPlayerBorder - ballOutline.width*5){
             botScore ++;
-            ball.setLocation((int)middleX,(int)y);
+            ball.setLocation((int)middleX,(int)middleY);
             xDirection *= -1;   
         }
-        else if(ballOutline.x + ballOutline.width > rightPlayerBorder) {
+        else if(ballOutline.x + ballOutline.width > rightPlayerBorder + ballOutline.width*5) {
             playerScore ++;
-            ball.setLocation((int)middleX,(int)y);
+            ball.setLocation((int)middleX,(int)middleY);
             xDirection *= -1;   
         }
+        
             
     }
     
     public void CheckBoundsToBorder(Rectangle ballBounds){
-        if(ballBounds.x > resolution[0] - ballSize) 
-            xDirection *= -1;   
         if(ballBounds.y > resolution[1] - ballSize) 
             yDirection *= -1;  
-        if(ballBounds.x < 0) 
-            xDirection *= -1;
         if(ballBounds.y < 0)
             yDirection *= -1; 
     }
