@@ -12,8 +12,11 @@ public class GameWindow implements KeyListener{
     public JPanel leftPanel; 
     public JPanel rightPanel;
     public JPanel ball;
+    public JLabel highscorePlayer;
+    public JLabel highscoreBot;
     public double fieldHeight;
     public double[] resolution;
+    public int highscoreSize = 80;
     public int ballSize = 20;
     public int xDirection = 1;
     public int yDirection = 1;
@@ -30,6 +33,8 @@ public class GameWindow implements KeyListener{
         window.add(GetLeftPanel(resolution));  
         window.add(GetRightPanel(resolution));
         window.add(GetBall(resolution));
+        window.add(SetScorePlayer(resolution,playerScore));
+        window.add(SetScoreBot(resolution,botScore));
         window.setSize((int)resolution[0],(int)resolution[1]);    
         window.setResizable(false);
         window.setBackground(Color.black);
@@ -41,13 +46,35 @@ public class GameWindow implements KeyListener{
         window.addKeyListener(this);
         window.setIconImage(img.getImage());
         
-        
+        Timer timer = new Timer();
         TimerTask tt = new TimerTask() {
             public void run() {
                 MoveBall();
             }
         };
         timer.schedule(tt, 1, 3);
+    }
+    
+    public JLabel SetScorePlayer(double[]  resolution,int playerScore){
+        double x = resolution[0] / 4 - highscoreSize /2;
+        double y = resolution[1] / 16 - highscoreSize /2;
+        
+        highscorePlayer = new JLabel();
+        highscorePlayer.setBounds((int)x,(int)y,highscoreSize*2,highscoreSize);   
+        highscorePlayer.setText(Integer.toString(playerScore));
+        highscorePlayer.setFont(new Font("Arial", 0, 100));
+        return highscorePlayer;
+    }
+    public JLabel SetScoreBot(double[]  resolution,int botScore){
+        double x = resolution[0] / 4 * 3 - highscoreSize /2;
+        double y = resolution[1] / 16 - highscoreSize /2;
+        
+        
+        highscoreBot = new JLabel();
+        highscoreBot.setBounds((int)x,(int)y,highscoreSize*2,highscoreSize);   
+        highscoreBot.setText(Integer.toString(playerScore));
+        highscoreBot.setFont(new Font("Arial", 0, 100));
+        return highscoreBot;
     }
     
     public void MoveBall()
@@ -70,14 +97,16 @@ public class GameWindow implements KeyListener{
         boolean gotPoint = false;
         
         if(ballOutline.x < leftPlayerBorder - ballOutline.width*5){
-            botScore ++;
+            ++botScore;
+            highscoreBot.setText(Integer.toString(botScore));
             ball.setLocation((int)middleX,(int)middleY);
             xDirection *= -1;
             gotPoint = true;
             
         }
         else if(ballOutline.x + ballOutline.width > rightPlayerBorder + ballOutline.width*5) {
-            playerScore ++;
+            ++playerScore;
+            highscorePlayer.setText(Integer.toString(playerScore));
             ball.setLocation((int)middleX,(int)middleY);
             xDirection *= -1;
             gotPoint = true;
