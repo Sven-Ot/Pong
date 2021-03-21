@@ -52,13 +52,15 @@ public class GameWindow implements KeyListener{
     public void MoveBall()
     {
         Rectangle ballOutline = ball.getBounds();
-
+        Rectangle panelLeftOutline = leftPanel.getBounds();
+        Rectangle panelRightOutline = rightPanel.getBounds();
+        
         CheckBoundsToBorder(ballOutline);
-        CheckBallConnectsToLeftPanel(ballOutline);
-        CheckBallConnectsToRightPanel(ballOutline);
+        CheckBallConnectsToPanel(ballOutline,panelLeftOutline);
+        CheckBallConnectsToPanel(ballOutline,panelRightOutline);
         BotMovement(ballOutline);
         ball.setLocation(ballOutline.x+xDirection,ballOutline.y+yDirection);
-        CheckBallOutOfMap(ballOutline);
+//        CheckBallOutOfMap(ballOutline);
     }
     
     private void CheckBallOutOfMap(Rectangle ballOutline) {
@@ -87,25 +89,6 @@ public class GameWindow implements KeyListener{
             xDirection *= -1;
         if(ballBounds.y < 0)
             yDirection *= -1; 
-    }
-    
-    public void CheckBallConnectsToLeftPanel(Rectangle ballBounds){   
-        //Doesn't work perfect
-        Rectangle leftPanelBounds = leftPanel.getBounds();
-        if(ballBounds.x < leftPanelBounds.x+ leftPanelBounds.width)
-            if(leftPanelBounds.y < ballBounds.y)
-                if(leftPanelBounds.y + leftPanelBounds.height > ballBounds.y + ballSize ) {
-                    xDirection *= -1;
-                }
-    }
-    public void CheckBallConnectsToRightPanel(Rectangle ballBounds){   
-        //Doesn't work at all
-        Rectangle RightPanelBounds = rightPanel.getBounds();
-        if(ballBounds.x >= RightPanelBounds.x)
-            if(RightPanelBounds.y < ballBounds.y)
-                if(RightPanelBounds.y + RightPanelBounds.height > ballBounds.y + ballSize ) {
-                    xDirection *= -1;
-                }
     }
     
     @Override
@@ -179,7 +162,7 @@ public class GameWindow implements KeyListener{
                 rightPanel.setLocation(rightPanelBounce.x, rightPanelBounce.y +3);
     }
     
-        public void CheckBallConnectsToPanel(Rectangle Object1,Rectangle Object2){
+    public void CheckBallConnectsToPanel(Rectangle Object1,Rectangle Object2){
         Point topLeftObject1 = new Point();
         topLeftObject1.y = Object1.y;
         topLeftObject1.x = Object1.x;
@@ -195,42 +178,26 @@ public class GameWindow implements KeyListener{
         Point bottomRightObject2 = new Point();
         bottomRightObject2.y = Object2.y+Object2.height;
         bottomRightObject2.x = Object2.x+Object2.width;
-              
-//        topLeftObject1.x=0;
-//        topLeftObject1.y=10; 
-//        bottomRightObject1.x=10;
-//        bottomRightObject1.y=0;
-//        topLeftObject2.x=5;
-//        topLeftObject2.y=5; 
-//        bottomRightObject2.x=15;
-//        bottomRightObject2.y=0;
                 
-        System.out.println(doOverlap(topLeftObject1, bottomRightObject1, topLeftObject2, bottomRightObject2)); 
+        doOverlap(topLeftObject1, bottomRightObject1, topLeftObject2, bottomRightObject2); 
     }
+    
     public boolean doOverlap(
             Point topLeftObject1, 
             Point bottomRightObject1, 
             Point topLeftObject2, 
-            Point bottomRightObject2) {
+            Point bottomRightObject2) 
+    {
+        int leftX   = Math.max( topLeftObject1.x, topLeftObject2.x );
+        int rightX  = Math.min( bottomRightObject1.x, bottomRightObject2.x );
+        int topY    = Math.max( topLeftObject1.y, topLeftObject2.y );
+        int bottomY = Math.min( bottomRightObject1.y, bottomRightObject2.y );
 
-          if (
-                topLeftObject1.x == bottomRightObject1.x || 
-                topLeftObject1.y == bottomRightObject2.y || 
-                topLeftObject2.x == bottomRightObject2.x || 
-                topLeftObject2.y == bottomRightObject2.y
-                ) 
-            {
-                return false;
-            }
-        if (topLeftObject1.x >= bottomRightObject2.x || topLeftObject2.x >= bottomRightObject1.x) {
-            return false;
+        if ( leftX < rightX && topY < bottomY ) {
+            ball.setBackground(Color.red);
+            xDirection *= -1;
+            return true;
         }
- 
-        if (topLeftObject1.y <= bottomRightObject2.y || topLeftObject2.y <= bottomRightObject1.y) {
-            return false;
-        }
- 
-        ball.setBackground(Color.red);
-        return true;
+        return false;
     }
 }
