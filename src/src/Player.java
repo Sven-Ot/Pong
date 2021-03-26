@@ -1,9 +1,8 @@
 package src;
 
-public class Player {
-    public int score = 0;
-    public Player()
-    {
-        
+public class Player extends Paddle{
+    Player(double[] resolution, PlayerType playertype) {
+        super(resolution, playertype);
     }
+    
 }

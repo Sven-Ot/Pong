@@ -1,9 +1,10 @@
 package src;
 
-public class Bot {
-    public int score = 0;
+import java.awt.Rectangle;
+
+public class Bot extends Paddle{
     
-    public Bot()
-    {
+    Bot(double[] resolution, PlayerType playertype) {
+        super(resolution, playertype);
     }
 }
