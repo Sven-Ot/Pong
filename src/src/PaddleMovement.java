@@ -1,21 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package src;
 
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-/**
- *
- * @author Arthur
- */
 public class PaddleMovement implements KeyListener {
-    private Player player;
-    private double fieldHeight;
+    private final Player player;
+    private final double fieldHeight;
     
     public PaddleMovement(Player player, double fieldHeight){
         this.player = player;
@@ -33,6 +24,10 @@ public class PaddleMovement implements KeyListener {
             player.setLocation(leftPanelBounds.x,leftPanelBounds.y+30);
     }
 
+    /**
+     *
+     * @param e
+     */
     @Override
     public void keyTyped(KeyEvent e) {
     }
