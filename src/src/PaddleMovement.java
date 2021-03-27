@@ -11,7 +11,6 @@ public class PaddleMovement implements KeyListener {
     public PaddleMovement(Player player, double fieldHeight){
         this.player = player;
         this.fieldHeight = fieldHeight;
-    
     }
     @Override
     public void keyPressed(KeyEvent e) {
@@ -24,10 +23,6 @@ public class PaddleMovement implements KeyListener {
             player.setLocation(leftPanelBounds.x,leftPanelBounds.y+30);
     }
 
-    /**
-     *
-     * @param e
-     */
     @Override
     public void keyTyped(KeyEvent e) {
     }

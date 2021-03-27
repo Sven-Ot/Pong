@@ -3,13 +3,8 @@ package src;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-enum OutOfMap {
-  FALSE,
-  LEFT,
-  RIGHT
-}
 public class CheckRules {
-
+    
     private static boolean isOverlapping(
             Point topLeftObject1, 
             Point bottomRightObject1, 
@@ -21,8 +16,9 @@ public class CheckRules {
         int topY    = Math.max( topLeftObject1.y, topLeftObject2.y );
         int bottomY = Math.min( bottomRightObject1.y, bottomRightObject2.y );
 
-        return ( leftX < rightX && topY < bottomY );
+        return leftX < rightX && topY < bottomY;
     }
+    
     public static boolean CheckBallConnectsToPanel(Rectangle Object1,Rectangle Object2){
         Point topLeftObject1 = new Point();
         topLeftObject1.y = Object1.y;
@@ -43,24 +39,15 @@ public class CheckRules {
         return isOverlapping(topLeftObject1, bottomRightObject1, topLeftObject2, bottomRightObject2); 
     }
 
-    public static OutOfMap CheckOutOfMap(Rectangle ballOutline,double leftPlayerBorder ,double rightPlayerBorder ) {
-        
-        OutOfMap outOfMap = OutOfMap.FALSE;
-        
-        if(ballOutline.x < leftPlayerBorder - ballOutline.width*5){
-
-            outOfMap = OutOfMap.LEFT;
-            
-        }
-        else if(ballOutline.x + ballOutline.width > rightPlayerBorder + ballOutline.width*5) {
-
-            outOfMap = OutOfMap.RIGHT;
-        }
-        return outOfMap;
+    public static OutOfMapType CheckIfBallIsBehindPanel(Rectangle ballOutline, double leftPlayerBorder, double rightPlayerBorder ) {
+        if(ballOutline.x < leftPlayerBorder - ballOutline.width*5)
+            return OutOfMapType.LEFT;
+        else if(ballOutline.x + ballOutline.width > rightPlayerBorder + ballOutline.width*5) 
+            return OutOfMapType.RIGHT;
+        return OutOfMapType.InField;
     }
-    public static boolean CheckBoundsToBorder(Rectangle ballBounds,double[] resolution, Ball ball ){
+    public static boolean CheckBoundsToUpperAndLowerBorder(Rectangle ballBounds,double[] resolution, Ball ball ){
         return ballBounds.y > resolution[1] - ball.getBallSize() || ballBounds.y < 0;
- 
     }
     
 }

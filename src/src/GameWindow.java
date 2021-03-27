@@ -5,10 +5,9 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import static src.Movement.MoveBall;
-import static src.CheckRules.CheckOutOfMap;
+import static src.CheckRules.CheckIfBallIsBehindPanel;
 
 public final class GameWindow{
-
     public JFrame window = new JFrame("Just Pong - Game");
     public double fieldHeight;
     public double[] resolution = GetResolution();
@@ -17,12 +16,13 @@ public final class GameWindow{
     public JLabel highscoreBot;
     public int[] direction = {1,1}; //xDirection and yDirection
     private final Ball ball = new Ball(resolution);
-    Timer timer = new Timer();
-    PlayerType bottype    = PlayerType.BOT;
-    PlayerType playertype = PlayerType.HUMAN;
+    private Timer timer = new Timer();
+    private PlayerType bottype    = PlayerType.BOT;
+    private PlayerType playertype = PlayerType.HUMAN;
     private Bot bot = new Bot(resolution,bottype);
     private Player player = new Player(resolution,playertype);
     PaddleMovement paddleMovement = new PaddleMovement(player,fieldHeight);
+    
     public GameWindow(){ 
         window.add(bot);  
         window.add(player);
@@ -42,29 +42,31 @@ public final class GameWindow{
         TimerTask tt = new TimerTask() {
             @Override
             public void run() {
+                //TODO: Needs to be outsourced
                 direction = MoveBall(ball,bot,player,resolution,direction,timer,fieldHeight);
+                Rectangle ballOutline = ball.getBounds();
+                OutOfMapType outOfMap = CheckIfBallIsBehindPanel(ballOutline, player.getPlayerBorder(),bot.getPlayerBorder());
+                if(outOfMap == OutOfMapType.InField )
+                    return;
+                
+                if(outOfMap == OutOfMapType.LEFT){
+                    bot.setScore(bot.getScore() + 2);
+                    highscoreBot.setText(Integer.toString(bot.getScore()));
+                }else{
+                    player.setScore(player.getScore() + 2);
+                    highscorePlayer.setText(Integer.toString(player.getScore()));
+                }
+                
                 double middleX = resolution[0] / 2 - ball.getBallSize() /2;
                 double middleY = resolution[1] / 2 - ball.getBallSize() /2;
-                Rectangle ballOutline = ball.getBounds();
-                OutOfMap outofmap = CheckOutOfMap(ballOutline, player.getPlayerBorder(),bot.getPlayerBorder());
-                if(outofmap != OutOfMap.FALSE ){
-                     if(outofmap == OutOfMap.LEFT){
-                         bot.setScore(bot.getScore() + 1);
-                         highscoreBot.setText(Integer.toString(bot.getScore()));
-                         ball.setLocation((int)middleX,(int)middleY);
-                         direction[0] *= -1;
-                     }else{
-                         player.setScore(player.getScore() + 1);
-                         highscorePlayer.setText(Integer.toString(player.getScore()));
-                         ball.setLocation((int)middleX,(int)middleY);
-                         direction[0] *= -1;
-                     }
-                     // timer.cancel();
-                 }
+                ball.setLocation((int)middleX,(int)middleY);
+                direction[0] *= -1;
+                // timer.cancel();          
             }
         };
         timer.schedule(tt, 1, 3);
     }
+    
     public JLabel DrawScorePlayer(double[]  resolution,int playerScore){
         double x = resolution[0] / 4 - highscoreSize /2;
         double y = resolution[1] / 16 - highscoreSize /2;
@@ -75,6 +77,7 @@ public final class GameWindow{
         highscorePlayer.setFont(new Font("Arial", 0, 100));
         return highscorePlayer;
     }
+    
     public JLabel DrawScoreBot(double[]  resolution,int botScore){
         double x = resolution[0] / 4 * 3 - highscoreSize /2;
         double y = resolution[1] / 16 - highscoreSize /2;
