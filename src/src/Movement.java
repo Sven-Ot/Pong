@@ -3,8 +3,8 @@ package src;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.Timer;
-import static src.CheckRules.CheckBallConnectsToPanel;
 import static src.CheckRules.CheckBoundsToUpperAndLowerBorder;
+import static src.CheckRules.CheckBallConnectsToPaddle;
 
 public class Movement {
     public static int[] MoveBall(Ball ball, Paddle rightPaddle,Paddle leftPaddle,double[] resolution,int [] direction,Timer timer,double fieldHeight){      
@@ -15,7 +15,7 @@ public class Movement {
         if(CheckBoundsToUpperAndLowerBorder(ballOutline,resolution, ball))
             direction[1] *= -1;
         
-        if(CheckBallConnectsToPanel(ballOutline,panelLeftOutline)|| CheckBallConnectsToPanel(ballOutline,panelRightOutline))
+        if(CheckBallConnectsToPaddle(ballOutline,panelLeftOutline)|| CheckBallConnectsToPaddle(ballOutline,panelRightOutline))
             direction[0] *= -1;
         
         MoveBotToCorrectPosition(ballOutline,rightPaddle,fieldHeight);

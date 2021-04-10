@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import static src.Movement.MoveBall;
-import static src.CheckRules.CheckIfBallIsBehindPanel;
+import static src.CheckRules.CheckIfBallIsBehindPaddle;
 
 public final class GameWindow{
     public JFrame window = new JFrame("Just Pong - Game");
@@ -45,7 +45,7 @@ public final class GameWindow{
                 //TODO: Needs to be outsourced
                 direction = MoveBall(ball,bot,player,resolution,direction,timer,fieldHeight);
                 Rectangle ballOutline = ball.getBounds();
-                OutOfMapType outOfMap = CheckIfBallIsBehindPanel(ballOutline, player.getPlayerBorder(),bot.getPlayerBorder());
+                OutOfMapType outOfMap = CheckIfBallIsBehindPaddle(ballOutline, player.getPlayerBorder(),bot.getPlayerBorder());
                 if(outOfMap == OutOfMapType.InField )
                     return;
                 
