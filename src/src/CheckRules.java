@@ -19,7 +19,7 @@ public class CheckRules {
         return leftX < rightX && topY < bottomY;
     }
     
-    public static boolean CheckBallConnectsToPanel(Rectangle Object1,Rectangle Object2){
+    public static boolean CheckBallConnectsToPaddle(Rectangle Object1,Rectangle Object2){
         Point topLeftObject1 = new Point();
         topLeftObject1.y = Object1.y;
         topLeftObject1.x = Object1.x;
@@ -39,7 +39,7 @@ public class CheckRules {
         return isOverlapping(topLeftObject1, bottomRightObject1, topLeftObject2, bottomRightObject2); 
     }
 
-    public static OutOfMapType CheckIfBallIsBehindPanel(Rectangle ballOutline, double leftPlayerBorder, double rightPlayerBorder ) {
+    public static OutOfMapType CheckIfBallIsBehindPaddle(Rectangle ballOutline, double leftPlayerBorder, double rightPlayerBorder ) {
         if(ballOutline.x < leftPlayerBorder - ballOutline.width*5)
             return OutOfMapType.LEFT;
         else if(ballOutline.x + ballOutline.width > rightPlayerBorder + ballOutline.width*5) 
