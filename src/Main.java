@@ -1,7 +1,7 @@
-import src.GameWindow;
+import src.Game;
 
 public class Main{
     public static void main(String[] args){
-        GameWindow window = new GameWindow();
+        Game game = new Game();
     }  
 }
