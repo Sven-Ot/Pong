@@ -19,7 +19,7 @@ public class PaddleMovement implements KeyListener {
 
         if(inputKey == KeyEvent.VK_W && leftPanelBounds.y >1)
             player.setLocation(leftPanelBounds.x,leftPanelBounds.y-30);
-        if(inputKey == KeyEvent.VK_S && leftPanelBounds.y + fieldHeight * 0.3  < fieldHeight-30) //number needs to removed here later
+        if(inputKey == KeyEvent.VK_S && leftPanelBounds.y + fieldHeight * 0.3  < fieldHeight) //number needs to removed here later
             player.setLocation(leftPanelBounds.x,leftPanelBounds.y+30);
     }
 
