@@ -19,7 +19,7 @@ public class CheckRules {
         return leftX < rightX && topY < bottomY;
     }
     
-    public static boolean CheckBallConnectsToPanel(Rectangle Object1,Rectangle Object2){
+    public static boolean CheckBallConnectsToPaddle(Rectangle Object1,Rectangle Object2){
         Point topLeftObject1 = new Point();
         topLeftObject1.y = Object1.y;
         topLeftObject1.x = Object1.x;
