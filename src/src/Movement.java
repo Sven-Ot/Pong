@@ -14,9 +14,9 @@ public class Movement {
         if(CheckBoundsToUpperAndLowerBorder(ballOutline,resolution, ball))
             direction[1] *= -1;
         
-        if(CheckBallConnectsToPanel(ballOutline,paddleLeftOutline)|| CheckBallConnectsToPanel(ballOutline,paddleRightOutline))
+        if(CheckBallConnectsToPanel(ballOutline,paddleLeftOutline) || CheckBallConnectsToPanel(ballOutline,paddleRightOutline))
             direction[0] *= -1;
-        
+
         MoveBotToCorrectPosition(ballOutline,rightPaddle,fieldHeight);
         ball.setLocation(ballOutline.x+direction[0],ballOutline.y+direction[1]);
         
@@ -24,14 +24,16 @@ public class Movement {
     }
 
     public static void MoveBotToCorrectPosition(Rectangle ballBounds,Paddle Paddle,double fieldHeight){
-        Rectangle rightPanelBounce = Paddle.getBounds();
+        Rectangle rightPaddleBounce = Paddle.getBounds();
         
-        if(rightPanelBounce.y + rightPanelBounce.height / 2 > 
-            ballBounds.y +  ballBounds.height / 2 && rightPanelBounce.y >0)
-            Paddle.setLocation(rightPanelBounce.x, rightPanelBounce.y -3);
+        if(rightPaddleBounce.y + rightPaddleBounce.height / 2 > 
+            ballBounds.y +  ballBounds.height / 2 && rightPaddleBounce.y >0)
+            Paddle.setLocation(rightPaddleBounce.x, rightPaddleBounce.y -3);
+
         else 
-            if(rightPanelBounce.y + fieldHeight * 0.3  < fieldHeight)
-                Paddle.setLocation(rightPanelBounce.x, rightPanelBounce.y +3);
+            if(rightPaddleBounce.y + fieldHeight * 0.3  < fieldHeight)
+                Paddle.setLocation(rightPaddleBounce.x, rightPaddleBounce.y +3);
+
     }
     
 }
